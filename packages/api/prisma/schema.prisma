@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model meme {
+  id         Int         @id(map: "meme_pk") @default(autoincrement())
+  creator_id String?     @db.VarChar(20)
+  name       String?     @db.VarChar(500)
+  image_url  String?     @db.VarChar(500)
+  server_id  String?     @db.VarChar(20)
+  server     server?     @relation(fields: [server_id], references: [guild_id], onDelete: NoAction, onUpdate: NoAction, map: "meme_fk")
+  parameter  parameter[]
+}
+
+model parameter {
+  id       Int        @id(map: "parameter_pk") @default(autoincrement())
+  meme_id  Int
+  meme     meme       @relation(fields: [meme_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "parameter_fk")
+  position position[]
+}
+
+model position {
+  id           Int       @id(map: "position_pk") @default(autoincrement())
+  box_left     Int
+  box_top      Int
+  box_right    Int
+  box_bottom   Int
+  parameter_id Int
+  parameter    parameter @relation(fields: [parameter_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "position_fk")
+}
+
+model server {
+  guild_id   String  @id(map: "server_pk") @db.VarChar(20)
+  guild_name String? @db.VarChar(100)
+  meme       meme[]
+}

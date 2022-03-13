@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  database:
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - 5432:5432
+    volumes:
+      - database-data:/var/lib/postgresql/data
+  api_backend:
+    build: 
+      context: ./
+      dockerfile: ./packages/api/Dockerfile
+    environment:
+      - DATABASE_URL=postgres://postgres:${DATABASE_PASSWORD}@database:5432/postgres
+    ports:
+      - "8080:3000"
+    volumes:
+      - ./packages/api/src:/src
+      - ./packages/api/prisma:/prisma
+      - ./packages/api/tsconfig.build.json:/tsconfig.build.json
+      - ./packages/api/tsconfig.json:/tsconfig.json
+      - ./packages/api/nest-cli.json:/nest-cli.json
+
+volumes:
+  database-data:

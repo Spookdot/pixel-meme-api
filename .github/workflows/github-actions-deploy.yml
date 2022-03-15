@@ -1,0 +1,21 @@
+name: Github Actions Deploy
+on: 
+  push:
+    branches: [master]
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy my Application via Docker Compose and SSH
+        uses: fifsky/ssh-action@v0.0.6
+        with:
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          command: |
+            cd /srv/pixel-the-cat
+            git pull
+            docker-compose up -d --build
+

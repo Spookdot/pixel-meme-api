@@ -13,6 +13,8 @@ services:
     build: 
       context: ./
       dockerfile: ./packages/api/Dockerfile
+    depends_on:
+      - "database"
     environment:
       - DATABASE_URL=postgres://postgres:${DATABASE_PASSWORD}@database:5432/postgres
     ports:

@@ -1,4 +1,4 @@
-# pixel-the-cat
+# pixel-meme-api
 
 To run the project create a .env with DATABASE_PASSWORD and DATBASE_URL, then start the database via `docker-compose up -d database` and then run the different services
 
